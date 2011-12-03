@@ -27,6 +27,20 @@ describe BowlingGame do
         game.roll 6
       end.to raise_error FrameError
     end
+
+    it "should not raise if two consecutive rolls in seperate frames are > 10" do
+      expect do
+        game.roll 3
+        game.roll 6
+        game.roll 7
+      end.to_not raise_error FrameError
+    end
+
+    it "should raise if game is complete" do
+      expect do 
+        21.times{game.roll 0}
+      end.to raise_error GameComplete
+    end
   end
 
   context "gutterball game" do

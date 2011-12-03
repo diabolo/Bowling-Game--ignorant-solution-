@@ -8,6 +8,7 @@ class BowlingGame
 
   def roll(pins)
     raise ArgumentError unless (0..10).include?(pins)
+    raise GameComplete if game_complete?
     @current_frame.roll pins
     new_frame if @current_frame.full?
   end
@@ -27,6 +28,8 @@ class BowlingGame
   end
 end
 
+class GameComplete < Exception
+end
 class IncompleteGame < Exception
 end
 class FrameError < Exception
