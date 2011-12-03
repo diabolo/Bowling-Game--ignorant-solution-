@@ -16,6 +16,19 @@ describe BowlingGame do
     end
   end
 
+  describe '#roll' do 
+    it "should raise if pins > 10" do
+      expect{game.roll(11)}.to raise_error ArgumentError
+    end
+
+    it "should raise if pins > 10 for a frame" do
+      expect do
+        game.roll 5
+        game.roll 6
+      end.to raise_error FrameError
+    end
+  end
+
   context "gutterball game" do
     subject {gutterball_game.score}
     it "should score 0" do 
