@@ -9,12 +9,8 @@ class Frame
     self
   end
   
-  def check
-    raise FrameError if score > 10 
-  end
-  
-  def full?
-    @rolls.count == 2
+  def complete?
+    spare? || strike? || full?
   end
 
   def score
@@ -32,6 +28,17 @@ class Frame
   def first_roll
     @rolls[0]
   end
+
+  private
+  
+  def full?
+    @rolls.count == 2
+  end
+  
+  def check
+    raise FrameError if score > 10 
+  end
+
 end
 
 

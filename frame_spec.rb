@@ -2,7 +2,6 @@ require 'frame'
 
 describe Frame do
   context "one roll of 10" do
-
     let(:frame){Frame.new.roll(10)}
     it "should be a strike" do
       frame.should be_strike
@@ -15,7 +14,6 @@ describe Frame do
 
   context "spare" do
     let(:frame){Frame.new}
-
     [
       '[0,10]',
       '[1,9]',
@@ -41,6 +39,26 @@ describe Frame do
         end
         frame.should_not be_strike
       end
+    end
+  end
+end
+
+module FrameRollerHelper
+  def roll_strike
+    Frame.new.roll(10)
+  end
+  def roll_spare
+    Frame.new.roll(3).roll(7)
+  end
+  def roll_full
+    Frame.new.roll(0).roll(0)
+  end
+end
+describe "Frame.complete?" do
+  include FrameRollerHelper
+  %w(spare strike full).each do |condition|
+    it "should be true if #{condition}" do
+      eval("roll_#{condition}").should be_complete
     end
   end
 end

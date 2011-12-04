@@ -83,6 +83,12 @@ describe BowlingGame do
       16.times{game.roll 0}
       game.score.should == 20
     end
+
+    it "should score a double correctly" do
+      game.roll(10).roll(10).roll(4).roll(2)
+      14.times{game.roll(0)}
+      game.score.should == 46
+    end
   end
 
 end

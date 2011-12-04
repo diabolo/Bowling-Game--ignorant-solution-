@@ -13,7 +13,8 @@ class BowlingGame
     raise ArgumentError unless (0..10).include?(pins)
     raise GameComplete if game_complete?
     @current_frame.roll pins
-    new_frame if @current_frame.full? || @current_frame.strike?
+    new_frame if @current_frame.complete?
+    self # so we can concatenate rolls
   end
 
   def new_frame
@@ -25,6 +26,11 @@ class BowlingGame
   def score_extras
     @extras += @current_frame.first_roll if spare?
     @extras += @current_frame.score if strike?
+    @extras += @current_frame.first_roll if last_2_rolls_strikes?
+  end
+
+  def last_2_rolls_strikes?
+    @frames[-2].strike? && @frames[-1].strike? rescue false
   end
 
   def spare?
