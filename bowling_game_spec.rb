@@ -58,4 +58,31 @@ describe BowlingGame do
       end
     end
   end
+
+  context "scoring extras for spares" do
+    it "should add next roll bonus for a spare" do
+      game.roll 0
+      game.roll 10
+      game.roll 5
+      17.times{game.roll 0}
+      game.score.should == 20
+    end
+  end
+
+  context "scoring for strikes" do 
+    it "should score a strike" do 
+      game.roll 10
+      18.times{game.roll 0}
+      game.score.should == 10
+    end
+
+    it "should add next two rolls bonus for a strike" do
+      game.roll 10
+      game.roll 2
+      game.roll 3
+      16.times{game.roll 0}
+      game.score.should == 20
+    end
+  end
+
 end
