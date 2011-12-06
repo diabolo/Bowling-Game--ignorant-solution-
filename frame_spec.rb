@@ -1,20 +1,7 @@
 require 'frame'
-require 'last_frame'
-describe LastFrame do
-  context "first roll is a strike" do 
-    it "should not be_complete" do
-      LastFrame.new.roll(10).should_not be_complete
-    end
-  end
-  context "first two rolls are a double" do
-    it "should not be complete" do 
-      LastFrame.new.roll(10).roll(10).should_not be_complete
-    end
-  end
-end
 
 describe Frame do
-  context "one roll of 10" do
+  context "strike" do
     let(:frame){Frame.new.roll(10)}
     it "should be a strike" do
       frame.should be_strike
@@ -23,6 +10,14 @@ describe Frame do
     it "should not be a spare" do 
       frame.should_not be_spare
     end
+
+    context "score extras" do
+      before {frame.score_extras(5)}
+      it "should still be a strike" do
+        frame.should be_strike
+      end
+    end
+    
   end
 
   context "spare" do
@@ -75,3 +70,44 @@ describe "Frame.complete?" do
     end
   end
 end
+
+describe "Frame.score_extras" do
+  let(:frame){Frame.new.roll(3).roll(4)}
+  it "should not score unless a spare or strike" do
+    expect{frame.score_extras(5)}.not_to change{frame.score}
+  end
+
+  context "passed a score" do
+    context "frame is a spare" do
+      let(:frame){Frame.new.roll(0).roll(10)}
+      it "should not score" do
+        expect{frame.score_extras(5)}.not_to change{frame.score}
+      end
+    end
+    context "frame is a strike" do
+      let(:frame){Frame.new.roll(10)}
+      it {expect{frame.score_extras(5)}.to change{frame.score}}
+    end
+  end
+
+  context "frame is a strike" do 
+    context "passed a frame" do 
+      let(:frame){Frame.new.roll(10)}
+      let(:extras){Frame.new.roll(5).roll(5)}
+      it "should add the passed frames score" do
+        expect{frame.score_extras(extras)}.to change{frame.score}.from(10).to(20)
+      end
+    end
+  end
+
+  context "frame is a spare" do 
+    context "passed a frame" do
+      let(:frame){Frame.new.roll(5).roll(5)}
+      let(:extras){Frame.new.roll(3).roll(6)}
+      it "should add the passed frames first roll" do
+        expect{frame.score_extras(extras)}.to change{frame.score}.from(10).to(13)
+      end
+    end
+  end
+end
+

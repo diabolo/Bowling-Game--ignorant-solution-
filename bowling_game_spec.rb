@@ -104,9 +104,28 @@ describe BowlingGame do
 
     it "should score a perfect game correctly" do
       11.times{game.roll(10)}
-      debugger
       game.roll(10)
       game.score.should == 300
+    end
+  end
+
+  context "last frame scoring" do
+    it "should score a gutterball game with perfect last frame" do
+      9.times{game.roll(0).roll(0)}
+      3.times{game.roll(10)}
+      game.score.should == 30
+    end
+
+    it "should score a game with a spare in the 10th frame" do
+      9.times{game.roll(0).roll(0)}
+      game.roll(3).roll(7).roll(9)
+      game.score.should == 19
+    end
+
+    it "should raise if last frame is illegal" do
+      9.times{game.roll(0).roll(0)}
+      game.roll(8)
+      expect{game.roll(7)}.to raise_error
     end
 
   end

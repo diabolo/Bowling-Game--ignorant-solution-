@@ -5,7 +5,6 @@ class BowlingGame
   def initialize
     @frames=[]
     @current_frame=Frame.new
-    @extras = 0
     @spare
     @strike
   end
@@ -29,9 +28,8 @@ class BowlingGame
   end
 
   def score_extras
-    @extras += @current_frame.first_roll if spare?
-    @extras += @current_frame.score if strike?
-    @extras += @current_frame.first_roll if last_2_rolls_strikes?
+    @frames[-2].score_extras(@current_frame.first_roll) if last_2_rolls_strikes?
+    @frames[-1].score_extras(@current_frame) if @frames[-1]
   end
 
   def last_2_rolls_strikes?
@@ -48,7 +46,7 @@ class BowlingGame
 
   def score
     raise IncompleteGame unless game_complete?
-    @frames.inject(0){|sum, v| sum += v.score} + @extras
+    @frames.inject(0){|sum, v| sum += v.score}
   end
 
   def game_complete?
