@@ -38,8 +38,8 @@ class Frame
   def check
     raise FrameError if score > 10 
   end
-
 end
+
 
 
 class FrameError < Exception

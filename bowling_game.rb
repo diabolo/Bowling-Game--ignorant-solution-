@@ -1,4 +1,5 @@
 require 'frame'
+require 'last_frame'
 
 class BowlingGame
   def initialize
@@ -20,7 +21,11 @@ class BowlingGame
   def new_frame
     score_extras
     @frames << @current_frame
-    @current_frame=Frame.new
+    @current_frame = last_frame? ? LastFrame.new : Frame.new
+  end
+
+  def last_frame?
+    @frames.count == 9
   end
 
   def score_extras

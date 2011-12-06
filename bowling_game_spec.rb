@@ -89,6 +89,25 @@ describe BowlingGame do
       14.times{game.roll(0)}
       game.score.should == 46
     end
-  end
 
+    it "should score a triple correctly" do
+      game.roll(10).roll(10).roll(10).roll(4).roll(2)
+      12.times{game.roll(0)}
+      game.score.should == 76
+    end
+
+    it "should score a four bagger correctly" do
+      game.roll(10).roll(10).roll(10).roll(10).roll(4).roll(2)
+      10.times{game.roll(0)}
+      game.score.should == 106
+    end
+
+    it "should score a perfect game correctly" do
+      11.times{game.roll(10)}
+      debugger
+      game.roll(10)
+      game.score.should == 300
+    end
+
+  end
 end

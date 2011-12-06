@@ -1,4 +1,17 @@
 require 'frame'
+require 'last_frame'
+describe LastFrame do
+  context "first roll is a strike" do 
+    it "should not be_complete" do
+      LastFrame.new.roll(10).should_not be_complete
+    end
+  end
+  context "first two rolls are a double" do
+    it "should not be complete" do 
+      LastFrame.new.roll(10).roll(10).should_not be_complete
+    end
+  end
+end
 
 describe Frame do
   context "one roll of 10" do
