@@ -111,3 +111,10 @@ describe "Frame.score_extras" do
   end
 end
 
+describe "Frame.roll" do
+  it "should raise if frame is complete" do
+    frame = Frame.new.roll(5).roll(3)
+    frame.should be_complete
+    expect{frame.roll(0)}.to raise_error FrameCompleteError
+  end
+end

@@ -7,6 +7,6 @@ class LastFrame < Frame
   private
   
   def check
-    raise FrameError if first_two_rolls > 10 and not strike?
+    raise FrameError if first_two_rolls_score > 10 and not strike?
   end
 end

@@ -5,6 +5,8 @@ class Frame
   end
 
   def roll(pins)
+    raise ArgumentError unless (0..10).include?(pins)
+    raise FrameCompleteError if complete?
     @rolls << pins
     check
     self
@@ -22,27 +24,27 @@ class Frame
     if extras.is_a?(Fixnum)
       @extras += extras if strike?
     elsif extras.is_a?(Frame)
-      @extras += extras.first_two_rolls if strike?
-      @extras += extras.first_roll if spare?
+      @extras += extras.first_two_rolls_score if strike?
+      @extras += extras.first_roll_score if spare?
     else
       raise ArgumentError
     end
   end
 
   def spare?
-    first_two_rolls==10 and not strike?
+    first_two_rolls_score==10 and not strike?
   end
 
   def strike?
-    first_roll==10
+    first_roll_score==10
   end
 
-  def first_roll
-    @rolls[0]
+  def first_roll_score
+    @rolls[0] || 0
   end
 
-  def first_two_rolls
-    first_roll + second_roll
+  def first_two_rolls_score
+    first_roll_score + second_roll
   end
 
   private
@@ -63,4 +65,6 @@ end
 
 
 class FrameError < Exception
+end
+class FrameCompleteError < Exception
 end

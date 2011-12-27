@@ -127,6 +127,5 @@ describe BowlingGame do
       game.roll(8)
       expect{game.roll(7)}.to raise_error
     end
-
   end
 end
