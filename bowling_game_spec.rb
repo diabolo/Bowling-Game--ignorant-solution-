@@ -17,15 +17,9 @@ describe BowlingGame do
   end
 
   describe '#roll' do 
-    it "should raise if pins > 10" do
-      expect{game.roll(11)}.to raise_error ArgumentError
-    end
-
-    it "should raise if pins > 10 for a frame" do
-      expect do
-        game.roll 5
-        game.roll 6
-      end.to raise_error FrameError
+    it "should delegate to Frame" do
+      Frame.any_instance.should_receive(:roll)
+      game.roll(5)
     end
 
     it "should not raise if two consecutive rolls in seperate frames are > 10" do
@@ -39,7 +33,6 @@ describe BowlingGame do
     it "should raise if game is complete" do
       20.times{game.roll 0}
       expect do 
-        debugger
         1.times{game.roll 0}
       end.to raise_error GameComplete
     end

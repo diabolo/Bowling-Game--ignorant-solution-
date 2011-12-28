@@ -144,8 +144,22 @@ describe "Frame.score" do
 end
 
 describe "Frame.roll" do
+
+  let(:frame){Frame.new}
+
+  it "should raise if pins > 10" do
+    expect{frame.roll(11)}.to raise_error ArgumentError
+  end
+
+  it "should raise if pins > 10 for a frame" do
+    expect do
+      frame.roll 5
+      frame.roll 6
+    end.to raise_error FrameError
+  end
+
   it "should raise if frame is complete" do
-    frame = Frame.new.roll(5).roll(3)
+    frame.roll(5).roll(3)
     frame.should be_complete
     expect{frame.roll(0)}.to raise_error FrameCompleteError
   end

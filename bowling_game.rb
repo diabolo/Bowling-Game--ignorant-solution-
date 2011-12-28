@@ -8,8 +8,6 @@ class BowlingGame
   def initialize
     @frames=[]
     @current_frame=Frame.new
-    @spare
-    @strike
   end
 
   def roll(pins)
@@ -44,23 +42,6 @@ class BowlingGame
   
   def last_frame?
     @frames.count == NUM_FRAMES - 1
-  end
-
-  #def score_extras
-    #@frames[-2].score_extras(@current_frame.first_roll_score) if last_2_rolls_strikes?
-    #@frames[-1].score_extras(@current_frame) if @frames[-1]
-  #end
-
-  def last_2_rolls_strikes?
-    @frames[-2].strike? && @frames[-1].strike? rescue false
-  end
-
-  def spare?
-    @frames.last.spare? rescue false
-  end
-
-  def strike?
-    @frames.last.strike? rescue false
   end
 
   def game_complete?
