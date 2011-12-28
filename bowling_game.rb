@@ -26,19 +26,30 @@ class BowlingGame
 
   private
   def new_frame
-    score_extras
-    @frames << @current_frame
-    @current_frame = last_frame? ? LastFrame.new : Frame.new
+    save_current_frame
+    unless game_complete?
+      add_new_frame
+    end
   end
 
+  def save_current_frame
+    @frames << @current_frame
+  end
+
+  def add_new_frame
+    new_frame = last_frame? ? LastFrame.new : Frame.new
+    @current_frame.next_frame = new_frame
+    @current_frame = new_frame
+  end
+  
   def last_frame?
     @frames.count == NUM_FRAMES - 1
   end
 
-  def score_extras
-    @frames[-2].score_extras(@current_frame.first_roll_score) if last_2_rolls_strikes?
-    @frames[-1].score_extras(@current_frame) if @frames[-1]
-  end
+  #def score_extras
+    #@frames[-2].score_extras(@current_frame.first_roll_score) if last_2_rolls_strikes?
+    #@frames[-1].score_extras(@current_frame) if @frames[-1]
+  #end
 
   def last_2_rolls_strikes?
     @frames[-2].strike? && @frames[-1].strike? rescue false

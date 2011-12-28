@@ -10,14 +10,6 @@ describe Frame do
     it "should not be a spare" do 
       frame.should_not be_spare
     end
-
-    context "score extras" do
-      before {frame.score_extras(5)}
-      it "should still be a strike" do
-        frame.should be_strike
-      end
-    end
-    
   end
 
   context "spare" do
@@ -71,44 +63,84 @@ describe "Frame.complete?" do
   end
 end
 
-describe "Frame.score_extras" do
-  let(:frame){Frame.new.roll(3).roll(4)}
-  it "should not score unless a spare or strike" do
-    expect{frame.score_extras(5)}.not_to change{frame.score}
-  end
-
-  context "passed a score" do
-    context "frame is a spare" do
-      let(:frame){Frame.new.roll(0).roll(10)}
-      it "should not score" do
-        expect{frame.score_extras(5)}.not_to change{frame.score}
-      end
-    end
-    context "frame is a strike" do
-      let(:frame){Frame.new.roll(10)}
-      it {expect{frame.score_extras(5)}.to change{frame.score}}
+describe "Frame.score" do
+  include FrameRollerHelper
+  context "no rolls" do
+    it "should be undefined" do
+      Frame.new.score.should == Frame::UNDEFINED_SCORE
     end
   end
 
-  context "frame is a strike" do 
-    context "passed a frame" do 
-      let(:frame){Frame.new.roll(10)}
-      let(:extras){Frame.new.roll(5).roll(5)}
-      it "should add the passed frames score" do
-        expect{frame.score_extras(extras)}.to change{frame.score}.from(10).to(20)
+  context "strike" do
+    let(:frame){roll_strike}
+    
+    context "no next_frame" do
+      it "should be undefined" do 
+        frame.score.should == Frame::UNDEFINED_SCORE
+      end
+    end
+
+    context "next frame strike" do
+      before :each do
+        @next_frame = roll_strike
+        frame.next_frame = @next_frame
+      end
+        
+      context "no subsequent frame" do 
+        it "should be undefined" do 
+          frame.score.should == Frame::UNDEFINED_SCORE
+        end
+      end
+      
+      context "subsequent frame strike" do
+         it "should be 30" do
+           subsequent_frame = roll_strike
+           @next_frame.next_frame = subsequent_frame
+           frame.score.should == 30
+         end
+      end
+    end
+
+    context "next frame spare" do
+      it "should be 20" do
+        next_frame = roll_spare
+        frame.next_frame = next_frame
+        frame.score.should == 20
+      end
+    end
+    
+    context "next frame [3,5]" do
+      it "should be 18" do
+        next_frame = Frame.new.roll(3).roll(5)
+        frame.next_frame = next_frame
+        frame.score.should == 18
+      end
+    end
+  end
+    
+  context "spare" do
+    let(:frame){roll_spare}
+    
+    context "no next frame" do
+      it "should be undefined" do
+        frame.score.should == Frame::UNDEFINED_SCORE
+      end
+    end
+
+    context "next frame" do
+      it "should add the next frames first roll" do
+        frame.next_frame = roll_strike
+        frame.score.should == 20
       end
     end
   end
 
-  context "frame is a spare" do 
-    context "passed a frame" do
-      let(:frame){Frame.new.roll(5).roll(5)}
-      let(:extras){Frame.new.roll(3).roll(6)}
-      it "should add the passed frames first roll" do
-        expect{frame.score_extras(extras)}.to change{frame.score}.from(10).to(13)
-      end
+  context "otherwise" do 
+    it "should be the sum of the two rolls" do
+      Frame.new.roll(3).roll(5).score.should == 8
     end
   end
+
 end
 
 describe "Frame.roll" do

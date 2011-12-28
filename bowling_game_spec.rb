@@ -37,8 +37,10 @@ describe BowlingGame do
     end
 
     it "should raise if game is complete" do
+      20.times{game.roll 0}
       expect do 
-        21.times{game.roll 0}
+        debugger
+        1.times{game.roll 0}
       end.to raise_error GameComplete
     end
   end

@@ -1,5 +1,9 @@
 require 'frame'
 class LastFrame < Frame
+  def score
+    sum_of_rolls
+  end
+
   def complete?
     (strike? || spare?) ? @rolls.count == 3 : @rolls.count == 2
   end
