@@ -150,3 +150,4 @@ describe "Frame.roll" do
     expect{frame.roll(0)}.to raise_error FrameCompleteError
   end
 end
+

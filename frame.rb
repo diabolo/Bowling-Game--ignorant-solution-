@@ -47,14 +47,8 @@ class Frame
     @rolls[0]
   end
 
-  def spare?
-    first_two_rolls_score==10 and not strike?
-  end
-
-  def strike?
-    first_roll_score==10
-  end
-
+  private
+  
   def first_roll_score
     @rolls[0] || 0
   end
@@ -63,8 +57,14 @@ class Frame
     first_roll_score + second_roll
   end
 
-  private
-  
+  def spare?
+    first_two_rolls_score==10 and not strike?
+  end
+
+  def strike?
+    first_roll_score==10
+  end
+
   def sum_of_rolls
     @rolls.inject{|sum,v| sum +=v}
   end
